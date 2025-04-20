@@ -6,16 +6,15 @@ public class AIController : MonoBehaviour
 {
     public StateMachine statemachine;
     public Transform player;
-    public float playerVolume = 15f;
+    public float playerVolume = 15f;   //declaring variables
     public Transform[] patrolWaypoints;
     public Transform visionCone;
     public bool playerInCone;
     public bool canSeePlayer;
     public int currentWaypointIndex;
-    public float patrolSpeed = 5;
+    public float patrolSpeed = 5; //speed of Ai
     public float detectionRange;
-    public float hearingThreshold = 10f;
-
+    public float hearingThreshold = 10f; 
     public float hearingRange = 15f;
 
     private void Start()
@@ -33,12 +32,12 @@ public class AIController : MonoBehaviour
         statemachine.ChangeState(newState);
     }
 
-    public bool CanSeePlayer()
+    public bool CanSeePlayer()  //a bool that checks if the ai can see the player
     {
     return HasLineOfSight(player);  
     }
 
-    public bool CanHearPlayer(float noiseLevel)
+    public bool CanHearPlayer(float noiseLevel) //a bool that checks if the player is heard. Hearing not implimented.
     {
         if (player == null) return false;
 
@@ -52,7 +51,7 @@ public class AIController : MonoBehaviour
         }
     }
 
-    public void SetPlayerInVisionCone(bool isVisible)
+    public void SetPlayerInVisionCone(bool isVisible) //checks if the player is seen by the ai and chases them
     {
        playerInCone = isVisible;
     }
@@ -69,7 +68,7 @@ public class AIController : MonoBehaviour
         }
     }
 
-    public bool HasLineOfSight(Transform target)
+    public bool HasLineOfSight(Transform target) //using raycasting to detect the player
     {
         if (!playerInCone)
         {
@@ -90,14 +89,14 @@ public class AIController : MonoBehaviour
               
         return false;
     }
-    public void Patrol()
+    public void Patrol()  //setting the Ai as patrolling and how the ai navigates them
     {
         if (patrolWaypoints.Length == 0)
         {
             return;
         }
 
-        Transform targetWaypoint = patrolWaypoints[currentWaypointIndex];
+       Transform targetWaypoint = patrolWaypoints[currentWaypointIndex];
        transform.position = Vector3.MoveTowards(transform.position, targetWaypoint.position, Time.deltaTime * patrolSpeed);
        Vector3 direction = (targetWaypoint.position - transform.position).normalized;  
         if (direction != Vector3.zero)
@@ -107,9 +106,9 @@ public class AIController : MonoBehaviour
             transform.rotation = Quaternion.LookRotation(newDirection);
 
         }
-       if (Vector3.Distance(transform.position, targetWaypoint.position) < 0.2f) //check how close we are to the checkpoint
+       if (Vector3.Distance(transform.position, targetWaypoint.position) < 0.2f) //checking how close to the checkpoint the enemy is
         {
-currentWaypointIndex = (currentWaypointIndex + 1) % patrolWaypoints.Length;
+        currentWaypointIndex = (currentWaypointIndex + 1) % patrolWaypoints.Length;
         }
        
     }
